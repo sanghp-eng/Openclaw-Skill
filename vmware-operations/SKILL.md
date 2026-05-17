@@ -19,9 +19,9 @@ pip install pyvmomi python-dotenv
 Tại thư mục workspace (`~/.openclaw/workspace/`), tạo file `.env` để lưu thông tin vCenter:
 ```bash
 cat <<EOF > ~/.openclaw/workspace/.env
-VMWARE_VCENTER_IP=172.16.40.250
-VMWARE_USER=opc@vsphere.local
-VMWARE_PASS=Admin@123
+VMWARE_VCENTER_IP=<your_vcenter_ip>
+VMWARE_USER=<your_username>
+VMWARE_PASS=<your_password>
 EOF
 ```
 *(Thay thông tin thật của Sếp vào)*.
