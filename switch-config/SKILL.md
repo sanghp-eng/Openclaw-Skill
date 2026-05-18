@@ -1,6 +1,6 @@
 ---
 name: switch-config
-description: Configure network switches (Cisco IOS, Juniper EX/JunOS, ArubaOS-CX, Allied Telesis etc.) for access ports, VLANs, trunk ports, and basic Layer 2 settings. Use when the user wants to apply switch configuration commands via CLI.
+description: Configure network switches (Cisco IOS, Juniper EX/JunOS, ArubaOS-CX, etc.) for access ports, VLANs, trunk ports, and basic Layer 2 settings. Use when the user wants to apply switch configuration commands via CLI.
 ---
 
 # Switch Configuration Skill
@@ -199,7 +199,7 @@ reload
 This mode allows the agent to directly apply configuration changes to a switch via SSH.
 
 ### Process
-1. **Retrieve Credentials**: The agent reads switch details from `~/.openclaw/workspace/.switch_credentials` (Format: `switch_name,ip,username,password`).
+1. **Retrieve Credentials**: The agent reads switch details from `/home/sysadmin/.openclaw/workspace/credentials/network.md` (Stored as a Markdown table).
 2. **Construct Command**: The agent builds a secure command using `sshpass` and `ssh`.
 3. **Approval (Dry Run)**: The agent MUST present the full command string to the user for approval using `ask="always"`.
 4. **Execute**: Upon approval, the agent executes the command on the target switch.
