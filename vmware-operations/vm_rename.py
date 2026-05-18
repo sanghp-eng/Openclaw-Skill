@@ -1,46 +1,44 @@
-
-import traceback
+import os
+import ssl
 from pyVim.connect import SmartConnect, Disconnect
 from pyVmomi import vim
-import ssl
+from dotenv import load_dotenv
 
-# Credentials from .env
-VCENTER_IP = "172.16.40.250"
-USER = "opc@vsphere.local"
-PASS = "Admin@123"
-VM_OLD_NAME = "vm windows server 2022"
-VM_NEW_NAME = "win 2k22"
-
-def rename_vm():
-    # Disable SSL certificate verification
+def rename_vm(vcenter_ip, user, password, current_name, new_name):
     context = ssl._create_unverified_context()
-    
     try:
-        # Connect to vCenter
-        si = SmartConnect(host=VCENTER_IP, user=USER, pwd=PASS, sslContext=context)
-        
-        # Find the VM by name
+        si = SmartConnect(host=vcenter_ip, user=user, pwd=password, sslContext=context)
         content = si.RetrieveContent()
-        vm = None
-        
-        # Search for the VM in the inventory
         container = content.viewManager.CreateContainerView(content.rootFolder, [vim.VirtualMachine], True)
-        for v in container.view:
-            if v.name == VM_OLD_NAME:
-                vm = v
-                break
         
-        if vm:
-            print(f"Found VM: {vm.name}. Renaming to {VM_NEW_NAME}...")
-            vm.Rename(VM_NEW_NAME)
-            print("Rename successful!")
-        else:
-            print(f"VM '{VM_OLD_NAME}' not found.")
-            
-        Disconnect(si)
+        for vm in container.view:
+            if vm.name == current_name:
+                print(f"Renaming {current_name} to {new_name}...")
+                task = vm.Rename_Task(new_name)
+                # Wait for task completion
+                while task.info.state not in [vim.TaskInfo.State.success, vim.TaskInfo.State.error]:
+                    pass
+                if task.info.state == vim.TaskInfo.State.success:
+                    print("Success!")
+                    return True
+                else:
+                    print(f"Failed: {task.info.error.msg}")
+                    return False
+        print(f"VM {current_name} not found.")
+        return False
     except Exception as e:
-        print(f"Error occurred: {e}")
-        traceback.print_exc()
+        print(f"Error: {e}")
+        return False
+    finally:
+        if 'si' in locals():
+            Disconnect(si)
 
 if __name__ == "__main__":
-    rename_vm()
+    load_dotenv()
+    rename_vm(
+        os.getenv("VMWARE_VCENTER_IP"),
+        os.getenv("VMWARE_USER"),
+        os.getenv("VMWARE_PASS"),
+        "win 2k22",
+        "vm-2022-sanghp"
+    )
