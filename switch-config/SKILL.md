@@ -1,6 +1,6 @@
 ---
 name: switch-config
-description: Configure network switches (Cisco IOS, Juniper EX/JunOS, ArubaOS-CX, etc.) for access ports, VLANs, trunk ports, and basic Layer 2 settings. Use when the user wants to apply switch configuration commands via CLI.
+description: Configure network switches (Cisco IOS, Juniper EX/JunOS, ArubaOS-CX, Allied Telesis etc.) for access ports, VLANs, trunk ports, and basic Layer 2 settings. Use when the user wants to apply switch configuration commands via CLI.
 ---
 
 # Switch Configuration Skill
