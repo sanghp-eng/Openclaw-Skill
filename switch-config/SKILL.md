@@ -369,11 +369,67 @@ show port vlan
 
 If Cốt con is unsure about any command, configuration detail, or potential impact, it must ask the user for clarification before proceeding. Never guess or assume when configuring network devices.
 
-## How to Use This Skill
+## Allied Telesis (AlliedWare Plus) Examples
 
-You can interact with this skill in two modes:
+### Enter configuration mode
+```
+awplus# configure terminal
+```
 
-1. **Advisory Mode (Default)**: Ask for commands (e.g., "How do I configure VLAN 10 on Cisco?"). The agent will provide the CLI snippets.
-2. **Execution Mode**: Request a direct change (e.g., "Configure port Gi0/1 as access VLAN 10 on switch Core-SW01"). The agent will retrieve credentials, show you the plan, and execute it upon your approval.
+### Create a VLAN
+```
+awplus(config)# vlan 10
+awplus(config-vlan)# exit
+```
+
+### Configure an access port
+```
+awplus(config)# interface port1.0.1
+awplus(config-if)# switchport mode access
+awplus(config-if)# switchport access vlan 10
+awplus(config-if)# no shutdown
+awplus(config-if)# exit
+```
+
+### Configure a trunk port
+```
+awplus(config)# interface port1.0.24
+awplus(config-if)# switchport mode trunk
+awplus(config-if)# switchport trunk allowed vlan add 10,20,30
+awplus(config-if)# switchport trunk native vlan 99
+awplus(config-if)# no shutdown
+awplus(config-if)# exit
+```
+
+### Configure port description
+```
+awplus(config)# interface port1.0.1
+awplus(config-if)# description Link to Server Room
+awplus(config-if)# exit
+```
+
+### Configure interface speed and duplex
+```
+awplus(config)# interface port1.0.1
+awplus(config-if)# speed 100
+awplus(config-if)# duplex full
+awplus(config-if)# exit
+```
+
+### Configure EtherChannel (LACP)
+```
+awplus(config)# interface range port1.0.1-2
+awplus(config-if)# channel-group 1 mode active
+awplus(config-if)# exit
+```
+
+### Verify
+```
+awplus# show vlan
+awplus# show vlan 10
+awplus# show interface brief
+awplus# show interface port1.0.1
+awplus# show running-config
+```
 
 ---
